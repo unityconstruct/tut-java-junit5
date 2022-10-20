@@ -1,0 +1,181 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.uc.qaa</groupId>
+	<artifactId>junit5-tut</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>Junit5 Tutorial</name>
+	<description>JUnit5 Tutorial Project</description>
+
+	<properties>
+		<jdk.level>1.8</jdk.level>
+		<jre.level>1.8</jre.level>
+		<test.runner>src/test/resources/runner/testng.xml</test.runner>
+		<!--  which encoding type to use? -->
+		<!-- <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding> -->
+		<project.build.sourceEncoding>cp1252</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.junit</groupId>
+				<artifactId>junit-bom</artifactId>
+				<version>5.9.1</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<!-- Include the following dependencies -->
+	<dependencies>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<!-- MAIN/JAVA -->
+		<sourceDirectory>${basedir}/src/main/java</sourceDirectory>
+		<outputDirectory>${basedir}/target/classes</outputDirectory>
+		<resources>
+			<resource>
+				<directory>${basedir}/src/main/config</directory>
+			</resource>
+			<resource>
+				<directory>${basedir}/src/main/resources</directory>
+			</resource>
+		</resources>
+
+		<!--  TEST/JAVA -->
+		<testSourceDirectory>${basedir}/src/test/java</testSourceDirectory>
+		<testOutputDirectory>${basedir}/target/test-classes</testOutputDirectory>
+
+		<testResources>
+
+			<testResource>
+				<excludes>
+					<exclude>**/~*.xlsx</exclude>
+					<exclude>**/~*.log</exclude>
+				</excludes>
+				<targetPath>${basedir}/target/src/test/resources</targetPath>
+				<filtering>false</filtering>
+				<directory>${basedir}/src/test/resources</directory>
+			</testResource>
+
+			<!-- 
+				because JUNIT5 is stupid with how it looks for CsvFileResource, 
+				add another test-resource element for copying it to test-classes folder
+			-->
+			<testResource>
+				<includes>
+					<include>**/*.csv</include>
+				</includes>
+				<targetPath>${basedir}/target/test-classes</targetPath>
+				<directory>${basedir}/src/test/resources</directory>
+				<filtering>false</filtering>
+			</testResource>
+		</testResources>
+
+		<pluginManagement>
+			<plugins></plugins>
+		</pluginManagement>
+
+		<plugins>
+			<!-- Compiler plug-in -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.8.1</version>
+				<configuration>
+					<source>${jdk.level}</source>
+					<target>${jre.level}</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>3.0.0-M6</version>
+			</plugin>
+
+			<!-- maven surefire plugin provides TestNG xml runner hooks -->
+			<!--plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>3.0.0-M6</version>
+				<configuration>
+					<forkCount>0</forkCount>
+					<testFailureIgnore>true</testFailureIgnore>
+					<suiteXmlFiles>
+						<suiteXmlFile>${test.runner}</suiteXmlFile>
+					</suiteXmlFiles>
+				</configuration>
+			</plugin-->
+
+			<!-- Jar Creator -->
+			<!--plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>attached</goal>
+						</goals>
+						<phase>package</phase>
+						<configuration>
+							<descriptorRefs>
+								<descriptorRef>jar-with-dependencies</descriptorRef>
+							</descriptorRefs>
+							<archive>
+								<manifest>
+									<mainClass>com.stack.JarCreation.Main</mainClass>
+								</manifest>
+							</archive>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin-->
+		</plugins>
+	</build>
+
+	<!-- used by deploy: specifies local repository id -->
+	<distributionManagement>
+		<snapshotRepository>
+			<id>uc-repo</id>
+			<url>http://192.168.0.204:8089/repository/uc-repo/</url>
+		</snapshotRepository>
+	</distributionManagement>
+
+	<!-- used by deploy: defines repo server id -->
+	<repositories>
+		<repository>
+			<id>uc-repo</id>
+			<name>UnityConstruct Repo</name>
+			<url>http://192.168.0.204:8089/repository/uc-repo/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+
+	<!-- used by deploy: enables release and/or snapshot -->
+	<pluginRepositories>
+		<pluginRepository>
+			<id>uc-repo</id>
+			<name>UnityConstruct Repo</name>
+			<url>http://192.168.0.204:8089/repository/uc-repo/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
+
+</project>
