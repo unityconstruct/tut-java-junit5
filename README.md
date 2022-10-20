@@ -1,10 +1,7 @@
 # tut-java-junit5
 Uber Simple JUnit 5 Implementation Examples
 
-
-
 ## pom.xml
-
 - by using MAVEN dependencyManagement junit-bom artifact, the versioning is 'automatically' handled by the bom pom.xml
 - this is particularly useful when using multiple org.junit packages - their version element can be omitted so the bom handles it
 
